@@ -1,0 +1,503 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Academic Scheduler</title>
+<style>
+  :root{--bg:#f6f7f9;--card:#fff;--ink:#1c2430;--mute:#6b7685;--line:#e2e6ec;--brand:#2f5fd0;--ok:#1d8a4e;--bad:#c0392b;--warn:#b7791f}
+  *{box-sizing:border-box}
+  body{margin:0;font:14px/1.45 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--ink)}
+  header{background:#fff;border-bottom:1px solid var(--line);padding:12px 20px;display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+  header h1{font-size:17px;margin:0 12px 0 0}
+  .chip{padding:3px 10px;border-radius:999px;background:#eef1f6;font-size:12px;color:var(--mute)}
+  .chip.ok{background:#e4f5ec;color:var(--ok)} .chip.bad{background:#fbe7e4;color:var(--bad);cursor:pointer}
+  button{font:inherit;border:1px solid var(--line);background:#fff;border-radius:6px;padding:6px 12px;cursor:pointer}
+  button.primary{background:var(--brand);color:#fff;border-color:var(--brand)}
+  button:disabled{opacity:.5;cursor:wait}
+  select,input{font:inherit;padding:5px 8px;border:1px solid var(--line);border-radius:6px;background:#fff}
+  nav{display:flex;gap:4px;padding:0 20px;background:#fff;border-bottom:1px solid var(--line)}
+  nav button{border:none;border-bottom:3px solid transparent;border-radius:0;padding:10px 14px;color:var(--mute)}
+  nav button.active{color:var(--brand);border-bottom-color:var(--brand);font-weight:600}
+  main{padding:18px 20px;max-width:1280px;margin:0 auto}
+  .tab{display:none}.tab.active{display:block}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px;margin-bottom:14px}
+  .row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:12px}
+  table{border-collapse:collapse;width:100%}
+  th,td{border:1px solid var(--line);padding:6px;vertical-align:top;text-align:left}
+  th{background:#f0f3f8;font-weight:600;font-size:12px}
+  .grid td{height:58px;width:17%;font-size:12px}
+  .grid td.lunch{height:22px;background:#fafafa;text-align:center;color:var(--mute);font-size:11px}
+  .grid td.time{width:96px;font-size:11px;color:var(--mute);background:#fafbfc}
+  .cell{border-radius:6px;padding:4px 6px;height:100%;cursor:pointer;border-left:4px solid;font-size:12px}
+  .cell b{display:block}.cell small{color:#41505f}
+  .cell.sel{outline:2px solid var(--brand)}
+  .sub{color:var(--warn);font-weight:600}
+  .gone{text-decoration:line-through;opacity:.6}
+  .heat td{height:20px;padding:0;width:2.2%}
+  .heat td.on{background:var(--brand)} .heat td.off{background:#eef1f6}
+  .bar{height:10px;background:#eef1f6;border-radius:5px;overflow:hidden;min-width:120px}
+  .bar i{display:block;height:100%;background:var(--brand)}
+  .muted{color:var(--mute)} .err{color:var(--bad)} .okc{color:var(--ok)}
+  .cand{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:8px;border:1px solid var(--line);border-radius:8px;margin:6px 0}
+  .two{display:grid;grid-template-columns:2fr 1fr;gap:14px}
+  @media(max-width:900px){.two{grid-template-columns:1fr}}
+  .tag{display:inline-block;padding:1px 7px;border-radius:999px;background:#eef1f6;font-size:11px;margin:1px}
+  ul{margin:4px 0 4px 18px;padding:0}
+  [hidden]{display:none!important}
+  .overlay{position:fixed;inset:0;background:rgba(246,247,249,.97);display:flex;align-items:center;justify-content:center;z-index:50;padding:16px}
+  .overlay .box{background:#fff;border:1px solid var(--line);border-radius:12px;padding:22px;width:100%;max-width:380px;box-shadow:0 8px 30px rgba(0,0,0,.08)}
+  .overlay label{display:block;font-size:12px;color:var(--mute)}
+  .overlay input{width:100%;margin:4px 0 10px;font-size:14px}
+  .badge{background:var(--bad);color:#fff;border-radius:999px;font-size:11px;padding:0 6px;margin-left:5px}
+  .unread{background:#f2f6ff;border-left:3px solid var(--brand)}
+  .note{padding:9px 12px;border-bottom:1px solid var(--line)} .note small{color:var(--mute)}
+  .st-pending{color:var(--warn);font-weight:600} .st-approved{color:var(--ok);font-weight:600} .st-rejected{color:var(--bad);font-weight:600}
+  a.btn{display:inline-block;border:1px solid var(--line);background:#fff;border-radius:6px;padding:6px 12px;color:var(--ink);text-decoration:none}
+  .stat{display:inline-block;margin-right:18px}.stat b{display:block;font-size:20px}
+</style>
+</head>
+<body>
+<div id="login" class="overlay" hidden>
+  <form class="box" id="loginForm" autocomplete="on">
+    <h2 style="margin:0 0 4px">Academic Scheduler</h2>
+    <div class="muted" style="margin-bottom:14px">Admin sign in. Only the admin needs to log in; everyone else can view the published timetable without an account.</div>
+    <label>Username<input id="lgUser" autocomplete="username" required></label>
+    <label>Password<input id="lgPass" type="password" autocomplete="current-password" required></label>
+    <div id="loginErr" class="err" style="min-height:20px"></div>
+    <button class="primary" style="width:100%">Sign in</button>
+    <button type="button" id="lgCancel" style="width:100%;margin-top:8px">Back to timetable</button>
+  </form>
+</div>
+<div id="pwModal" class="overlay" hidden>
+  <form class="box" id="pwForm">
+    <h3 style="margin:0 0 4px" id="pwTitle">Change password</h3>
+    <div class="muted" id="pwHint" style="margin-bottom:12px"></div>
+    <label>Current password<input id="pwOld" type="password" autocomplete="current-password" required></label>
+    <label>New password (8+ characters)<input id="pwNew" type="password" autocomplete="new-password" minlength="8" required></label>
+    <label>Repeat new password<input id="pwNew2" type="password" autocomplete="new-password" minlength="8" required></label>
+    <div id="pwErr" class="err" style="min-height:20px"></div>
+    <div class="row" style="margin:0"><button class="primary">Save password</button><button type="button" id="pwCancel">Cancel</button></div>
+  </form>
+</div>
+<header>
+  <h1>Academic Scheduler</h1>
+  <span class="chip" id="chipStatus">loading…</span>
+  <span class="chip" id="chipConf" data-role="admin">–</span>
+  <span class="chip" id="chipUtil" data-role="admin">–</span>
+  <span style="flex:1"></span>
+  <label class="muted" data-role="admin">Solver time (s) <input id="tl" type="number" value="15" min="2" max="120" style="width:64px"></label>
+  <button id="btnGen" data-role="admin">Regenerate timetable</button>
+  <span class="chip" id="chipPub" data-role="admin">–</span>
+  <button class="primary" id="btnPublish" data-role="admin">Publish timetable</button>
+  <span class="chip" id="chipUser"></span>
+  <button id="btnPw" data-role="admin">Password</button>
+  <button id="btnOut" data-role="admin">Log out</button>
+  <button id="btnLogin" data-role="public">Admin login</button>
+</header>
+<nav id="tabs">
+  <button data-t="tt" data-role="admin public">Timetable</button>
+  <button data-t="util" data-role="admin">Utilization &amp; workload</button>
+  <button data-t="sub" data-role="admin">Substitutions</button>
+  <button data-t="exam" data-role="admin public">Exams</button>
+  <button data-t="data" data-role="admin">Master data</button>
+</nav>
+<main>
+  <section id="tt" class="tab active">
+    <div class="row">
+      <label>View by
+        <select id="viewType"><option value="section">Section</option><option value="faculty">Faculty</option><option value="room">Room</option></select>
+      </label>
+      <select id="viewItem"></select>
+      <span class="muted">Click a session to inspect or move it. Moves are validated against every hard rule.</span>
+    </div>
+    <div class="two">
+      <div class="card" style="padding:8px"><div id="gridHost"></div></div>
+      <div>
+        <div class="card" id="detail"><span class="muted">Select a session.</span></div>
+        <div class="card" id="conflicts" data-role="admin"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="util" class="tab">
+    <div class="card"><h3 style="margin-top:0">Room occupancy (Mon–Fri, 8 periods per day)</h3><div id="heat"></div></div>
+    <div class="two">
+      <div class="card"><h3 style="margin-top:0">Room utilization</h3><div id="roomUtil"></div></div>
+      <div class="card"><h3 style="margin-top:0">Section idle gaps</h3><div id="secGaps"></div></div>
+    </div>
+    <div class="card"><h3 style="margin-top:0">Faculty workload (hours per day)</h3><div id="facLoad"></div></div>
+  </section>
+
+  <section id="sub" class="tab">
+    <div class="card">
+      <div class="row">
+        <label>Absent faculty <select id="subFac"></select></label>
+        <label>Day <select id="subDay"></select></label>
+        <label>Periods (optional, e.g. 0,1,2) <input id="subPer" placeholder="all day" style="width:120px"></label>
+        <button class="primary" id="btnSuggest">Find substitutes</button>
+      </div>
+      <div id="subOut" class="muted">Pick a faculty member and day to see the affected sessions and ranked replacements.</div>
+    </div>
+    <div class="two" style="grid-template-columns:1fr">
+      <div class="card"><h3 style="margin-top:0">Substitution log</h3><div id="subLog" class="muted">None yet.</div></div>
+    </div>
+  </section>
+
+  <section id="exam" class="tab">
+    <div id="examDuty"></div>
+    <div class="row"><button class="primary" id="btnExam" data-role="admin">Generate exam schedule</button><span id="examMeta" class="muted"></span></div>
+    <div id="examOut"></div>
+  </section>
+
+  <section id="data" class="tab"><div id="dataOut"></div></section>
+
+</main>
+
+<script>
+const $=s=>document.querySelector(s);
+let DATA,TT,SEL=null,PUBLIC=false;
+const api=async(u,b)=>{const r=await fetch(u,b?{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(b)}:{});
+  if(r.status===401){window.onAuthLost&&window.onAuthLost();throw new Error('Please log in again')}
+  if(!r.ok){let t=await r.text();try{const j=JSON.parse(t);t=typeof j.detail==='string'?j.detail:JSON.stringify(j.detail||j)}catch(e){}throw new Error(t)}
+  return r.json()};
+const fname=id=>DATA.faculty.find(f=>f.id===id)?.name||id;
+const cname=id=>DATA.courses.find(c=>c.id===id)?.name||id;
+const hue=s=>{let h=0;for(const c of s)h=(h*31+c.charCodeAt(0))%360;return h};
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+// tabs
+$('#tabs').onclick=e=>{const t=e.target.dataset.t;if(!t)return;
+  document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('active',b===e.target));
+  document.querySelectorAll('.tab').forEach(s=>s.classList.toggle('active',s.id===t));
+  if(t==='util')loadUtil(); if(t==='sub')loadSubLog(); if(t==='data')renderData();
+  if(t==='exam')loadExamTab();};
+
+async function init(){
+  DATA=await api('/api/data');
+  $('#subFac').innerHTML=DATA.faculty.map(f=>`<option value="${f.id}">${esc(f.name)} (${f.id})</option>`).join('');
+  $('#subDay').innerHTML=DATA.days.map((d,i)=>`<option value="${i}">${d}</option>`).join('');
+  await loadTT();
+}
+async function loadTT(payload){
+  TT=payload||await api('/api/timetable');
+  const m=TT.meta,c=TT.conflicts;
+  $('#chipStatus').textContent=`Solver: ${m.status} · ${m.events} sessions · ${m.wall_time}s`;
+  $('#chipConf').textContent=c.length?`${c.length} conflict(s)`:'0 conflicts';
+  $('#chipConf').className='chip '+(c.length?'bad':'ok');
+  fillItems(); renderGrid(); renderConflicts();
+  if(window.ME&&ME.role==='admin')api('/api/analytics').then(a=>{$('#chipUtil').textContent=`Avg room utilization ${a.avg_room_utilization}%`}).catch(()=>{});
+}
+$('#chipConf').onclick=()=>$('#conflicts').scrollIntoView({behavior:'smooth'});
+$('#viewType').onchange=()=>{fillItems();renderGrid()};
+$('#viewItem').onchange=renderGrid;
+function fillItems(){
+  const t=$('#viewType').value,keep=$('#viewItem').value;
+  const items=t==='section'?DATA.sections.map(s=>[s.id,s.id]):t==='faculty'?DATA.faculty.map(f=>[f.id,f.name]):DATA.rooms.filter(r=>!r.exam_only).map(r=>[r.id,`${r.id} (${r.type}, ${r.capacity})`]);
+  $('#viewItem').innerHTML=items.map(([v,l])=>`<option value="${v}">${esc(l)}</option>`).join('');
+  if(items.some(i=>i[0]===keep))$('#viewItem').value=keep;
+}
+function renderGrid(){
+  const t=$('#viewType').value,id=$('#viewItem').value;
+  const list=TT.sessions.filter(s=>t==='section'?s.section===id:t==='room'?s.room===id:(s.faculty===id||s.substitute===id));
+  const start={},skip=new Set();
+  list.forEach(s=>{start[s.day+'-'+s.start]=s;for(let k=1;k<s.duration;k++)skip.add(s.day+'-'+(s.start+k));});
+  let h='<table class="grid"><tr><th></th>'+DATA.days.map(d=>`<th>${d}</th>`).join('')+'</tr>';
+  for(let p=0;p<DATA.periods;p++){
+    if(p===DATA.lunch_after)h+=`<tr><td class="lunch" colspan="${DATA.days.length+1}">Lunch break</td></tr>`;
+    h+=`<tr><td class="time">${DATA.period_labels[p]}</td>`;
+    for(let d=0;d<DATA.days.length;d++){
+      const k=d+'-'+p;if(skip.has(k))continue;
+      const s=start[k];
+      if(!s){h+='<td></td>';continue}
+      const hu=hue(s.course),cov=t==='faculty'&&s.substitute===id;
+      const gone=t==='faculty'&&s.substitute&&s.faculty===id;
+      const line2=t==='section'?fname(s.substitute||s.faculty)+(s.substitute?' <span class="sub">(sub)</span>':''):t==='faculty'?s.section:s.section+' · '+fname(s.substitute||s.faculty);
+      h+=`<td rowspan="${s.duration}"><div class="cell ${SEL===s.id?'sel':''} ${gone?'gone':''}" data-id="${s.id}" style="background:hsl(${hu},70%,95%);border-color:hsl(${hu},55%,50%)">
+        <b>${s.course}${s.type==='lab'?' · Lab':''}</b><small>${esc(cname(s.course))}</small><br><small>${line2}${cov?' <span class="sub">(covering)</span>':''}</small>
+        ${t!=='room'?`<br><small>${s.room}</small>`:''}</div></td>`;
+    }
+    h+='</tr>';
+  }
+  $('#gridHost').innerHTML=h+'</table>';
+  if(!PUBLIC)document.querySelectorAll('.cell').forEach(c=>c.onclick=()=>{SEL=+c.dataset.id;renderGrid();renderDetail()});
+  else document.querySelectorAll('.cell').forEach(c=>c.style.cursor='default');
+}
+function renderDetail(){
+  const s=TT.sessions.find(x=>x.id===SEL);if(!s){$('#detail').innerHTML='<span class="muted">Select a session.</span>';return}
+  const rooms=DATA.rooms.filter(r=>!r.exam_only&&(s.type==='lab'?r.type==='lab':r.type==='lecture'));
+  $('#detail').innerHTML=`<b>${s.course} – ${esc(cname(s.course))}</b>
+    <div class="muted">${s.section} · ${s.duration}h ${s.type}</div>
+    <div>Faculty: ${esc(fname(s.faculty))}${s.substitute?` → <span class="sub">${esc(fname(s.substitute))}</span>`:''}</div>
+    <div>Now: ${DATA.days[s.day]} ${DATA.period_labels[s.start]} · ${s.room}</div><hr>
+    <div class="row" style="margin-bottom:6px">
+      <select id="mvDay">${DATA.days.map((d,i)=>`<option value="${i}" ${i===s.day?'selected':''}>${d}</option>`).join('')}</select>
+      <select id="mvStart">${DATA.period_labels.map((l,i)=>`<option value="${i}" ${i===s.start?'selected':''}>${l}</option>`).join('')}</select>
+      <select id="mvRoom">${rooms.map(r=>`<option ${r.id===s.room?'selected':''}>${r.id}</option>`).join('')}</select>
+    </div><button class="primary" id="mvGo">Move session</button><div id="mvMsg" style="margin-top:8px"></div>`;
+  $('#mvGo').onclick=async()=>{
+    const r=await api('/api/timetable/move',{session_id:s.id,day:+$('#mvDay').value,start:+$('#mvStart').value,room:$('#mvRoom').value});
+    if(r.ok){await loadTT(r);renderDetail();$('#mvMsg').innerHTML='<span class="okc">Moved – no conflicts.</span>'}
+    else $('#mvMsg').innerHTML='<b class="err">Rejected:</b><ul>'+r.conflicts.map(c=>`<li>${esc(c.message)}</li>`).join('')+'</ul>';
+  };
+}
+function renderConflicts(){
+  const c=TT.conflicts;
+  $('#conflicts').innerHTML=c.length?'<b class="err">Conflicts</b><ul>'+c.map(x=>`<li>${esc(x.message)}</li>`).join('')+'</ul>':'<b class="okc">All hard constraints satisfied</b><div class="muted">No faculty, room or section double-bookings; capacity, equipment, availability and lunch rules hold.</div>';
+}
+$('#btnGen').onclick=async()=>{
+  const b=$('#btnGen');b.disabled=true;b.textContent='Solving…';
+  try{SEL=null;await loadTT(await api('/api/timetable/generate',{time_limit:+$('#tl').value}));renderDetail()}
+  catch(e){alert('Solver failed: '+e.message)}
+  b.disabled=false;b.textContent='Regenerate timetable';
+};
+
+// utilization
+async function loadUtil(){
+  const a=await api('/api/analytics');
+  let h='<table class="heat"><tr><th style="width:90px">Room</th>';
+  DATA.days.forEach(d=>{h+=`<th colspan="${DATA.periods}" style="text-align:center">${d}</th>`});h+='</tr>';
+  a.rooms.forEach(r=>{h+=`<tr><th>${r.id}</th>`;for(let d=0;d<DATA.days.length;d++)for(let p=0;p<DATA.periods;p++)h+=`<td class="${r.grid[d][p]?'on':'off'}" title="${DATA.days[d]} ${DATA.period_labels[p]}"></td>`;h+='</tr>'});
+  $('#heat').innerHTML=h+'</table>';
+  $('#roomUtil').innerHTML='<table>'+a.rooms.map(r=>`<tr><td>${r.id}</td><td style="width:50%"><div class="bar"><i style="width:${r.utilization}%"></i></div></td><td>${r.utilization}%</td></tr>`).join('')+'</table>';
+  $('#secGaps').innerHTML='<table>'+Object.entries(a.section_gaps).map(([k,v])=>`<tr><td>${k}</td><td>${v} idle period(s)/week</td></tr>`).join('')+'</table><p class="muted">Idle periods between a section\'s first and last class of the day.</p>';
+  $('#facLoad').innerHTML='<table><tr><th>Faculty</th>'+DATA.days.map(d=>`<th>${d}</th>`).join('')+'<th>Week</th></tr>'+a.faculty.map(f=>`<tr><td>${esc(f.name)}</td>${f.per_day.map(x=>`<td>${x}</td>`).join('')}<td><b>${f.weekly}</b></td></tr>`).join('')+'</table>';
+}
+
+// substitutions
+$('#btnSuggest').onclick=async()=>{
+  const per=$('#subPer').value.trim();
+  const periods=per?per.split(',').map(x=>+x.trim()).filter(x=>!isNaN(x)):null;
+  const res=await api('/api/substitution/suggest',{faculty_id:$('#subFac').value,day:+$('#subDay').value,periods});
+  if(!res.length){$('#subOut').innerHTML='<span class="okc">No sessions affected – this faculty member has no classes then.</span>';return}
+  $('#subOut').innerHTML=res.map(r=>{const s=r.session;
+    return `<div class="card"><b>${s.course} – ${esc(r.course_name)}</b> · ${s.section} · ${DATA.days[s.day]} ${DATA.period_labels[s.start]} · ${s.room}
+    ${r.candidates.length?r.candidates.map(c=>`<div class="cand"><div><b>${esc(c.name)}</b> ${c.skill_match?'<span class="tag">skill match</span>':''}<div class="muted">${esc(c.reasons.join(' · '))}</div></div>
+      <button class="primary" onclick="assign(${s.id},'${c.faculty_id}')">Assign</button></div>`).join(''):'<div class="err">No free, eligible faculty for this slot.</div>'}</div>`}).join('');
+};
+async function assign(sid,fid){
+  await api('/api/substitution/apply',{session_id:sid,substitute_id:fid,reason:'Faculty absent'});
+  await loadTT();await loadSubLog();$('#btnSuggest').click();
+}
+async function revertSub(sid){await api('/api/substitution/revert',{session_id:sid});await loadTT();await loadSubLog();}
+async function loadSubLog(){
+  const r=await api('/api/substitution/log');
+  const act=r.log.filter(e=>!e.reverted);
+  $('#subLog').innerHTML=r.log.length?'<table>'+r.log.map(e=>`<tr class="${e.reverted?'gone':''}"><td>${e.course} ${e.section}<br><span class="muted">${DATA.days[e.day]} ${DATA.period_labels[e.start]}</span></td><td>${esc(fname(e.original))} → <b>${esc(fname(e.substitute))}</b></td><td>${e.reverted?'reverted':`<button onclick="revertSub(${e.session_id})">Revert</button>`}</td></tr>`).join('')+'</table>':'None yet.';
+}
+
+// exams
+$('#btnExam').onclick=async()=>{
+  const b=$('#btnExam');b.disabled=true;b.textContent='Solving…';
+  try{const r=await api('/api/exams/generate',{});renderExams(r)}catch(e){alert(e.message)}
+  b.disabled=false;b.textContent='Generate exam schedule';
+};
+function renderExams(r){
+  const m=r.meta;
+  $('#examMeta').innerHTML=`${m.exams} exams · ${m.clashes.length?`<span class="err">${m.clashes.length} student clash(es)</span>`:'<span class="okc">0 student clashes</span>'} · ${m.invigilator_shortfall?`<span class="err">${m.invigilator_shortfall} invigilator shortfall</span>`:'<span class="okc">all halls staffed</span>'}`;
+  $('#examOut').innerHTML=r.schedule.map(e=>`<div class="card"><b>${e.weekday} ${e.date}</b> · ${e.slot} (${e.time})
+    <table style="margin-top:8px"><tr><th>Exam</th><th>Candidates</th><th>Sections</th></tr>${e.exams.map(x=>`<tr><td>${x.course} – ${esc(x.name)}</td><td>${x.students}</td><td>${x.sections.join(', ')}</td></tr>`).join('')}</table>
+    <table style="margin-top:8px"><tr><th>Hall</th><th>Seated</th><th>Courses</th><th>Invigilators</th></tr>${e.halls.map(h=>`<tr><td>${h.hall}</td><td>${h.candidates}</td><td>${Object.entries(h.courses).map(([c,n])=>`${c}: ${n}`).join(', ')}</td><td>${h.invigilators.map(i=>esc(fname(i))).join(', ')}</td></tr>`).join('')}</table></div>`).join('');
+}
+
+// master data
+function renderData(){
+  $('#dataOut').innerHTML=`
+  <div class="card"><h3 style="margin-top:0">Rooms</h3><table><tr><th>ID</th><th>Type</th><th>Capacity</th><th>Equipment</th></tr>${DATA.rooms.map(r=>`<tr><td>${r.id}</td><td>${r.type}${r.exam_only?' (exam only)':''}</td><td>${r.capacity}</td><td>${r.equipment.join(', ')||'–'}</td></tr>`).join('')}</table></div>
+  <div class="card"><h3 style="margin-top:0">Faculty</h3><table><tr><th>ID</th><th>Name</th><th>Dept</th><th>Skills</th><th>Max h/day</th><th>Constraints</th></tr>${DATA.faculty.map(f=>`<tr><td>${f.id}</td><td>${esc(f.name)}</td><td>${f.dept}</td><td>${f.skills.map(s=>`<span class="tag">${s}</span>`).join('')}</td><td>${f.max_per_day}</td><td>${(f.unavailable?'<span class="tag">has unavailable slots</span>':'')+(f.avoid?'<span class="tag">has preferences</span>':'')}</td></tr>`).join('')}</table></div>
+  <div class="card"><h3 style="margin-top:0">Courses</h3><table><tr><th>Code</th><th>Name</th><th>Type</th><th>Hours/week</th></tr>${DATA.courses.map(c=>`<tr><td>${c.id}</td><td>${esc(c.name)}</td><td>${c.type}</td><td>${c.hours}</td></tr>`).join('')}</table></div>
+  <div class="card"><h3 style="margin-top:0">Sections</h3><table><tr><th>Section</th><th>Size</th><th>Courses</th></tr>${DATA.sections.map(s=>`<tr><td>${s.id}</td><td>${s.size}</td><td>${s.courses.join(', ')}</td></tr>`).join('')}</table></div>`;
+}
+// init() is called after login (see the last script)
+</script>
+<script>
+// ---- Master data management (overrides the read-only renderData above) ----
+async function call(method,url,body){
+  const r=await fetch(url,{method,headers:{'Content-Type':'application/json'},body:body?JSON.stringify(body):undefined});
+  const j=await r.json().catch(()=>({}));
+  if(!r.ok)throw new Error(typeof j.detail==='string'?j.detail:JSON.stringify(j.detail||j));
+  return j;
+}
+function flash(m,bad){const e=$('#flash');if(e)e.innerHTML=`<div class="card ${bad?'err':'okc'}" style="padding:10px"><b>${esc(m)}</b></div>`}
+async function refreshAll(msg){
+  DATA=await api('/api/data');
+  $('#subFac').innerHTML=DATA.faculty.map(f=>`<option value="${f.id}">${esc(f.name)} (${f.id})</option>`).join('');
+  SEL=null;await loadTT();renderData();if(msg)flash(msg);
+}
+async function act(btn,busy,fn,ok){
+  const t=btn.textContent;btn.disabled=true;btn.textContent=busy;
+  try{await fn();await refreshAll(ok)}catch(e){flash(e.message,true)}
+  if(document.contains(btn)){btn.disabled=false;btn.textContent=t}
+}
+const csv=v=>v.split(',').map(x=>x.trim()).filter(Boolean);
+function addFaculty(btn){
+  const days=[...document.querySelectorAll('.nfDay:checked')].map(x=>+x.value);
+  act(btn,'Adding…',()=>call('POST','/api/faculty',{name:$('#nfName').value,dept:$('#nfDept').value,skills:csv($('#nfSkills').value),
+    max_per_day:+$('#nfMax').value,unavailable_days:days,avoid_first_period:$('#nfAvoid').checked}),'Teacher added.');
+}
+function addRoom(btn){
+  act(btn,'Adding…',()=>call('POST','/api/rooms',{id:$('#nrId').value,type:$('#nrType').value,capacity:+$('#nrCap').value,equipment:csv($('#nrEq').value)}),
+    'Room added. Click "Regenerate timetable" to let the solver use it.');
+}
+function addSection(btn){
+  const a={};
+  DATA.courses.forEach(c=>{if($('#sc_'+c.id).checked)a[c.id]=$('#st_'+c.id).value});
+  act(btn,'Adding & re-solving…',()=>call('POST','/api/sections',{id:$('#nsId').value,dept:$('#nsDept').value,size:+$('#nsSize').value,assignments:a}),
+    'Section added and the timetable was re-solved.');
+}
+function delItem(kind,id){
+  const msg={faculty:'Delete this teacher?',rooms:'Delete this room? If it is in use the timetable will be re-solved.',sections:'Delete this section and its sessions?'}[kind];
+  if(!confirm(msg))return;
+  act(document.activeElement,'…',()=>call('DELETE',`/api/${kind}/${id}`),'Deleted.');
+}
+function resetData(btn){if(confirm('Discard all your changes and restore the sample data?'))act(btn,'Resetting…',()=>call('POST','/api/reset'),'Sample data restored.')}
+
+function renderData(){
+  const depts=[...new Set([...DATA.faculty.map(f=>f.dept),...DATA.sections.map(s=>s.dept)])];
+  const subjects=[...new Set(DATA.courses.map(c=>c.subject))];
+  const teacherOpts=c=>[...DATA.faculty].sort((a,b)=>(b.skills.includes(c.subject)-a.skills.includes(c.subject))||((b.dept===c.dept)-(a.dept===c.dept)))
+    .map(f=>`<option value="${f.id}">${esc(f.name)}${f.skills.includes(c.subject)?' ✓':''}</option>`).join('');
+  const del=(k,id)=>`<button onclick="delItem('${k}','${id}')">Delete</button>`;
+  $('#dataOut').innerHTML=`<div id="flash"></div>
+  <datalist id="dlDept">${depts.map(d=>`<option value="${d}">`).join('')}</datalist>
+  <datalist id="dlSub">${subjects.map(d=>`<option value="${d}">`).join('')}</datalist>
+  <div class="two" style="grid-template-columns:1fr 1fr 1fr">
+    <div class="card"><h3 style="margin-top:0">Add teacher</h3>
+      <div class="row"><input id="nfName" placeholder="Full name" style="flex:1"></div>
+      <div class="row"><input id="nfDept" list="dlDept" placeholder="Dept (e.g. CSE)" style="width:130px"><input id="nfMax" type="number" value="5" min="1" max="8" style="width:70px" title="Max hours per day"></div>
+      <div class="row"><input id="nfSkills" list="dlSub" placeholder="Skills, comma separated (DS, DBMS)" style="flex:1"></div>
+      <div class="muted">Unavailable on:</div>
+      <div class="row">${DATA.days.map((d,i)=>`<label><input type="checkbox" class="nfDay" value="${i}"> ${d}</label>`).join('')}</div>
+      <label><input type="checkbox" id="nfAvoid"> Prefers not to teach first period</label><br><br>
+      <button class="primary" onclick="addFaculty(this)">Add teacher</button></div>
+    <div class="card"><h3 style="margin-top:0">Add room / lab</h3>
+      <div class="row"><input id="nrId" placeholder="Room ID (e.g. LH-301)" style="flex:1"></div>
+      <div class="row"><select id="nrType"><option value="lecture">Lecture room</option><option value="lab">Lab</option><option value="hall">Exam hall</option></select>
+        <input id="nrCap" type="number" value="50" min="1" style="width:80px" title="Capacity"></div>
+      <div class="row"><input id="nrEq" placeholder="Lab equipment tag (cs, ec, phy)" style="flex:1"></div>
+      <div class="muted">Labs need the tag a lab course asks for (cs, ec, phy). Add the room, then regenerate.</div><br>
+      <button class="primary" onclick="addRoom(this)">Add room</button></div>
+    <div class="card"><h3 style="margin-top:0">Add section</h3>
+      <div class="row"><input id="nsId" placeholder="Section ID (e.g. CSE-C)" style="flex:1"></div>
+      <div class="row"><input id="nsDept" list="dlDept" placeholder="Dept" style="width:100px"><input id="nsSize" type="number" value="45" min="1" style="width:80px" title="Students"></div>
+      <div class="muted">Pick courses and a teacher for each (✓ = skill match):</div>
+      <div style="max-height:190px;overflow:auto;margin:6px 0">${DATA.courses.map(c=>`<div class="row" style="margin-bottom:4px;flex-wrap:nowrap">
+        <label style="width:120px"><input type="checkbox" id="sc_${c.id}"> ${c.id}</label><select id="st_${c.id}" style="flex:1;min-width:0">${teacherOpts(c)}</select></div>`).join('')}</div>
+      <button class="primary" onclick="addSection(this)">Add section &amp; re-solve</button></div>
+  </div>
+  <div class="card"><h3 style="margin-top:0">Rooms</h3><table><tr><th>ID</th><th>Type</th><th>Capacity</th><th>Equipment</th><th></th></tr>${DATA.rooms.map(r=>`<tr><td>${r.id}</td><td>${r.type}${r.exam_only?' (exam only)':''}</td><td>${r.capacity}</td><td>${r.equipment.join(', ')||'–'}</td><td>${del('rooms',r.id)}</td></tr>`).join('')}</table></div>
+  <div class="card"><h3 style="margin-top:0">Faculty</h3><table><tr><th>ID</th><th>Name</th><th>Dept</th><th>Skills</th><th>Max h/day</th><th>Constraints</th><th></th></tr>${DATA.faculty.map(f=>`<tr><td>${f.id}</td><td>${esc(f.name)}</td><td>${f.dept}</td><td>${f.skills.map(s=>`<span class="tag">${s}</span>`).join('')}</td><td>${f.max_per_day}</td><td>${(f.unavailable?'<span class="tag">has unavailable slots</span>':'')+(f.avoid?'<span class="tag">has preferences</span>':'')}</td><td>${del('faculty',f.id)}</td></tr>`).join('')}</table></div>
+  <div class="card"><h3 style="margin-top:0">Sections</h3><table><tr><th>Section</th><th>Dept</th><th>Size</th><th>Courses</th><th></th></tr>${DATA.sections.map(s=>`<tr><td>${s.id}</td><td>${s.dept}</td><td>${s.size}</td><td>${s.courses.join(', ')}</td><td>${del('sections',s.id)}</td></tr>`).join('')}</table></div>
+  <div class="card"><h3 style="margin-top:0">Courses</h3><table><tr><th>Code</th><th>Name</th><th>Type</th><th>Hours/week</th></tr>${DATA.courses.map(c=>`<tr><td>${c.id}</td><td>${esc(c.name)}</td><td>${c.type}</td><td>${c.hours}</td></tr>`).join('')}</table></div>
+  <button onclick="resetData(this)">Reset to sample data</button>`;
+}
+
+// ---- Exams tab ----
+async function loadExamTab(){
+  let ex=null;
+  if(PUBLIC)ex=PUB&&PUB.exams?{schedule:PUB.exams,meta:{exams:PUB.exams.length,clashes:[],invigilator_shortfall:0}}:null;
+  else ex=await api('/api/exams').catch(()=>null);
+  if(ex&&ex.schedule){renderExams(ex);if(PUBLIC)$('#examMeta').textContent=''}
+  else $('#examOut').innerHTML=PUBLIC?'<div class="card muted">The exam schedule has not been published yet.</div>':'';
+}
+
+// ---- Publishing (admin) ----
+async function refreshPub(){
+  if(PUBLIC||!window.ME)return;
+  try{
+    const s=await api('/api/publish/status');
+    const chip=$('#chipPub'),btn=$('#btnPublish');
+    if(!s.published){chip.textContent='Not published';chip.className='chip bad'}
+    else if(s.unpublished_changes){chip.textContent='Unpublished changes';chip.className='chip bad'}
+    else{chip.textContent='Published '+s.published_at.replace('T',' ');chip.className='chip ok'}
+    btn.textContent=s.published?'Publish changes':'Publish timetable';
+    btn.disabled=s.published&&!s.unpublished_changes;
+  }catch(e){}
+}
+$('#btnPublish').onclick=async()=>{
+  const b=$('#btnPublish');b.disabled=true;
+  try{await api('/api/publish',{});alert('Published. Everyone can now see this timetable on the home page, without logging in.')}
+  catch(e){alert(e.message)}
+  refreshPub();
+};
+$('#chipPub').onclick=refreshPub;
+// any admin change should refresh the publish status
+const _origFetch=window.fetch;
+window.fetch=async(...a)=>{const r=await _origFetch(...a);
+  const u=String(a[0]);
+  if(!PUBLIC&&window.ME&&a[1]&&a[1].method&&!u.includes('/publish')&&!u.includes('/login')&&!u.includes('/logout'))setTimeout(refreshPub,400);
+  return r};
+
+// ---- Authentication & session ----
+let PUB=null;
+function applyRole(role){
+  $('#chipUser').textContent=role==='admin'?`${ME.name} (admin)`:'';
+  $('#chipUser').style.display=role==='admin'?'':'none';
+  document.querySelectorAll('[data-role]').forEach(el=>{el.style.display=el.dataset.role.split(' ').includes(role)?'':'none'});
+  const first=document.querySelector(`nav button[data-role~="${role}"]`);
+  if(first)first.click();
+}
+function openPwModal(forced){
+  $('#pwModal').hidden=false;
+  $('#pwOld').value='';$('#pwNew').value='';$('#pwNew2').value='';$('#pwErr').textContent='';
+  $('#pwHint').textContent=forced?'You must change your password before continuing.':'';
+  $('#pwCancel').style.display=forced?'none':'';
+}
+$('#btnPw').onclick=()=>openPwModal(false);
+$('#pwCancel').onclick=()=>{$('#pwModal').hidden=true};
+$('#pwForm').onsubmit=async e=>{
+  e.preventDefault();
+  const n1=$('#pwNew').value,n2=$('#pwNew2').value;
+  if(n1!==n2){$('#pwErr').textContent='New passwords do not match.';return}
+  if(n1.length<8){$('#pwErr').textContent='Password must be at least 8 characters.';return}
+  try{await api('/api/change-password',{old_password:$('#pwOld').value,new_password:n1});$('#pwModal').hidden=true;alert('Password updated.')}
+  catch(err){$('#pwErr').textContent=err.message}
+};
+
+async function showPublic(){
+  PUBLIC=true;window.ME=null;
+  applyRole('public');
+  PUB=await fetch('/api/public/timetable').then(r=>r.json());
+  if(!PUB.published){
+    $('#chipStatus').textContent='Timetable not published yet';
+    document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+    $('#tt').classList.add('active');
+    $('#tt').innerHTML='<div class="card"><h3 style="margin-top:0">No timetable has been published yet</h3><div class="muted">Please check back later.</div></div>';
+    return;
+  }
+  DATA=PUB.data;TT={sessions:PUB.sessions,meta:{},conflicts:[]};
+  $('#chipStatus').textContent='Published '+PUB.published_at.replace('T',' ');
+  $('#detail').parentElement.hidden=true;
+  document.querySelector('#tt .two').style.gridTemplateColumns='1fr';
+  document.querySelector('#tt .row .muted').textContent='';
+  fillItems();renderGrid();
+}
+async function showAdmin(me){
+  PUBLIC=false;window.ME=me;
+  $('#login').hidden=true;
+  applyRole('admin');
+  if(me.must_change)openPwModal(true);
+  await init();
+  refreshPub();
+}
+$('#btnLogin').onclick=()=>{$('#login').hidden=false;$('#lgUser').focus()};
+$('#lgCancel').onclick=()=>{$('#login').hidden=true};
+$('#loginForm').onsubmit=async e=>{
+  e.preventDefault();$('#loginErr').textContent='';
+  const btn=$('#loginForm button.primary');btn.disabled=true;
+  try{const me=await api('/api/login',{username:$('#lgUser').value.trim(),password:$('#lgPass').value});
+    $('#lgPass').value='';location.reload()}
+  catch(err){$('#loginErr').textContent=err.message}
+  btn.disabled=false;
+};
+$('#btnOut').onclick=async()=>{try{await api('/api/logout',{})}catch(e){}location.reload()};
+window.onAuthLost=()=>{if(!PUBLIC)location.reload()};
+
+(async function boot(){
+  let me=null;
+  try{me=await fetch('/api/me').then(r=>r.ok?r.json():null)}catch(e){}
+  if(me&&me.role==='admin')await showAdmin(me);else await showPublic();
+})();
+</script>
+</body>
+</html>

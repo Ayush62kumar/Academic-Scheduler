@@ -1,0 +1,11 @@
+{
+ "admin": {
+  "username": "admin",
+  "role": "admin",
+  "faculty_id": null,
+  "salt": "939f29af26817f4b457f9dae936ffbf0",
+  "hash": "3ac015b516069fb3d02843647be5a036f1a541d889e39c02f05844656f423648",
+  "must_change": false,
+  "temp_password": null
+ }
+}

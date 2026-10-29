@@ -1,0 +1,1563 @@
+{
+ "data": {
+  "days": [
+   "Mon",
+   "Tue",
+   "Wed",
+   "Thu",
+   "Fri"
+  ],
+  "periods": 8,
+  "period_labels": [
+   "09:00-10:00",
+   "10:00-11:00",
+   "11:00-12:00",
+   "12:00-13:00",
+   "14:00-15:00",
+   "15:00-16:00",
+   "16:00-17:00",
+   "17:00-18:00"
+  ],
+  "lunch_after": 4,
+  "rooms": [
+   {
+    "id": "LH-101",
+    "type": "lecture",
+    "capacity": 60,
+    "equipment": []
+   },
+   {
+    "id": "LH-102",
+    "type": "lecture",
+    "capacity": 60,
+    "equipment": []
+   },
+   {
+    "id": "LH-201",
+    "type": "lecture",
+    "capacity": 48,
+    "equipment": []
+   },
+   {
+    "id": "LH-202",
+    "type": "lecture",
+    "capacity": 45,
+    "equipment": []
+   },
+   {
+    "id": "LAB-CS1",
+    "type": "lab",
+    "capacity": 60,
+    "equipment": [
+     "cs"
+    ]
+   },
+   {
+    "id": "LAB-CS2",
+    "type": "lab",
+    "capacity": 60,
+    "equipment": [
+     "cs"
+    ]
+   },
+   {
+    "id": "LAB-EC1",
+    "type": "lab",
+    "capacity": 50,
+    "equipment": [
+     "ec"
+    ]
+   },
+   {
+    "id": "LAB-PH1",
+    "type": "lab",
+    "capacity": 50,
+    "equipment": [
+     "phy"
+    ]
+   },
+   {
+    "id": "SEM-HALL",
+    "type": "hall",
+    "capacity": 120,
+    "equipment": [],
+    "exam_only": true
+   }
+  ],
+  "faculty": [
+   {
+    "id": "F01",
+    "name": "Dr. Anita Sharma",
+    "dept": "CSE",
+    "skills": [
+     "DS",
+     "DBMS"
+    ],
+    "max_per_day": 5
+   },
+   {
+    "id": "F02",
+    "name": "Prof. Rajesh Kumar",
+    "dept": "CSE",
+    "skills": [
+     "DS",
+     "OS"
+    ],
+    "max_per_day": 5,
+    "avoid": [
+     {
+      "days": null,
+      "periods": [
+       0
+      ]
+     }
+    ]
+   },
+   {
+    "id": "F03",
+    "name": "Dr. Meera Iyer",
+    "dept": "CSE",
+    "skills": [
+     "DBMS",
+     "OS"
+    ],
+    "max_per_day": 5
+   },
+   {
+    "id": "F04",
+    "name": "Dr. Sanjay Verma",
+    "dept": "MATH",
+    "skills": [
+     "MATH"
+    ],
+    "max_per_day": 5,
+    "unavailable": [
+     {
+      "days": [
+       4
+      ],
+      "periods": [
+       4,
+       5,
+       6,
+       7
+      ]
+     }
+    ]
+   },
+   {
+    "id": "F05",
+    "name": "Dr. Priya Nair",
+    "dept": "ECE",
+    "skills": [
+     "DIGITAL",
+     "SIGNALS",
+     "ELECTRONICS"
+    ],
+    "max_per_day": 5,
+    "unavailable": [
+     {
+      "days": [
+       0
+      ],
+      "periods": [
+       0
+      ]
+     }
+    ]
+   },
+   {
+    "id": "F06",
+    "name": "Prof. Arun Singh",
+    "dept": "ECE",
+    "skills": [
+     "ANALOG",
+     "DIGITAL"
+    ],
+    "max_per_day": 5
+   },
+   {
+    "id": "F07",
+    "name": "Dr. Kavita Rao",
+    "dept": "ECE",
+    "skills": [
+     "SIGNALS",
+     "ANALOG"
+    ],
+    "max_per_day": 5
+   },
+   {
+    "id": "F08",
+    "name": "Ms. Neha Gupta",
+    "dept": "HUM",
+    "skills": [
+     "COMM"
+    ],
+    "max_per_day": 4,
+    "unavailable": [
+     {
+      "days": [
+       2
+      ],
+      "periods": null
+     }
+    ]
+   },
+   {
+    "id": "F09",
+    "name": "Dr. Vikram Das",
+    "dept": "MATH",
+    "skills": [
+     "MATH"
+    ],
+    "max_per_day": 5
+   },
+   {
+    "id": "F10",
+    "name": "Mr. Rohit Mishra",
+    "dept": "CSE",
+    "skills": [
+     "DS",
+     "DBMS"
+    ],
+    "max_per_day": 4
+   },
+   {
+    "id": "F11",
+    "name": "Dr. Sunita Patel",
+    "dept": "PHY",
+    "skills": [
+     "PHYSICS"
+    ],
+    "max_per_day": 4,
+    "unavailable": [
+     {
+      "days": [
+       0,
+       4
+      ],
+      "periods": null
+     }
+    ]
+   },
+   {
+    "id": "F12",
+    "name": "Mr. Imran Khan",
+    "dept": "ECE",
+    "skills": [
+     "ELECTRONICS",
+     "DIGITAL"
+    ],
+    "max_per_day": 4
+   }
+  ],
+  "courses": [
+   {
+    "id": "CS201",
+    "name": "Data Structures",
+    "dept": "CSE",
+    "subject": "DS",
+    "type": "theory",
+    "hours": 3
+   },
+   {
+    "id": "CS202",
+    "name": "Database Systems",
+    "dept": "CSE",
+    "subject": "DBMS",
+    "type": "theory",
+    "hours": 3
+   },
+   {
+    "id": "CS203",
+    "name": "Operating Systems",
+    "dept": "CSE",
+    "subject": "OS",
+    "type": "theory",
+    "hours": 3
+   },
+   {
+    "id": "MA201",
+    "name": "Discrete Mathematics",
+    "dept": "MATH",
+    "subject": "MATH",
+    "type": "theory",
+    "hours": 3
+   },
+   {
+    "id": "EC201",
+    "name": "Digital Electronics",
+    "dept": "ECE",
+    "subject": "DIGITAL",
+    "type": "theory",
+    "hours": 3
+   },
+   {
+    "id": "EC202",
+    "name": "Signals & Systems",
+    "dept": "ECE",
+    "subject": "SIGNALS",
+    "type": "theory",
+    "hours": 3
+   },
+   {
+    "id": "EC203",
+    "name": "Analog Circuits",
+    "dept": "ECE",
+    "subject": "ANALOG",
+    "type": "theory",
+    "hours": 3
+   },
+   {
+    "id": "MA202",
+    "name": "Engineering Mathematics",
+    "dept": "MATH",
+    "subject": "MATH",
+    "type": "theory",
+    "hours": 3
+   },
+   {
+    "id": "HS201",
+    "name": "Professional Communication",
+    "dept": "HUM",
+    "subject": "COMM",
+    "type": "theory",
+    "hours": 2
+   },
+   {
+    "id": "CS291",
+    "name": "Data Structures Lab",
+    "dept": "CSE",
+    "subject": "DS",
+    "type": "lab",
+    "hours": 2,
+    "block": 2,
+    "equipment": "cs"
+   },
+   {
+    "id": "CS292",
+    "name": "DBMS Lab",
+    "dept": "CSE",
+    "subject": "DBMS",
+    "type": "lab",
+    "hours": 2,
+    "block": 2,
+    "equipment": "cs"
+   },
+   {
+    "id": "EC291",
+    "name": "Electronics Lab",
+    "dept": "ECE",
+    "subject": "ELECTRONICS",
+    "type": "lab",
+    "hours": 2,
+    "block": 2,
+    "equipment": "ec"
+   },
+   {
+    "id": "PH291",
+    "name": "Physics Lab",
+    "dept": "PHY",
+    "subject": "PHYSICS",
+    "type": "lab",
+    "hours": 2,
+    "block": 2,
+    "equipment": "phy"
+   }
+  ],
+  "sections": [
+   {
+    "id": "CSE-A",
+    "dept": "CSE",
+    "size": 55,
+    "courses": [
+     "CS201",
+     "CS202",
+     "CS203",
+     "MA201",
+     "HS201",
+     "CS291",
+     "CS292"
+    ]
+   },
+   {
+    "id": "CSE-B",
+    "dept": "CSE",
+    "size": 50,
+    "courses": [
+     "CS201",
+     "CS202",
+     "CS203",
+     "MA201",
+     "HS201",
+     "CS291",
+     "CS292"
+    ]
+   },
+   {
+    "id": "ECE-A",
+    "dept": "ECE",
+    "size": 45,
+    "courses": [
+     "EC201",
+     "EC202",
+     "EC203",
+     "MA202",
+     "HS201",
+     "EC291",
+     "PH291"
+    ]
+   },
+   {
+    "id": "ECE-B",
+    "dept": "ECE",
+    "size": 40,
+    "courses": [
+     "EC201",
+     "EC202",
+     "EC203",
+     "MA202",
+     "HS201",
+     "EC291",
+     "PH291"
+    ]
+   }
+  ],
+  "assignments": {
+   "CSE-A|CS201": "F01",
+   "CSE-A|CS202": "F03",
+   "CSE-A|CS203": "F02",
+   "CSE-A|MA201": "F04",
+   "CSE-A|HS201": "F08",
+   "CSE-A|CS291": "F10",
+   "CSE-A|CS292": "F10",
+   "CSE-B|CS201": "F02",
+   "CSE-B|CS202": "F01",
+   "CSE-B|CS203": "F03",
+   "CSE-B|MA201": "F09",
+   "CSE-B|HS201": "F08",
+   "CSE-B|CS291": "F10",
+   "CSE-B|CS292": "F10",
+   "ECE-A|EC201": "F05",
+   "ECE-A|EC202": "F07",
+   "ECE-A|EC203": "F06",
+   "ECE-A|MA202": "F04",
+   "ECE-A|HS201": "F08",
+   "ECE-A|EC291": "F12",
+   "ECE-A|PH291": "F11",
+   "ECE-B|EC201": "F06",
+   "ECE-B|EC202": "F05",
+   "ECE-B|EC203": "F07",
+   "ECE-B|MA202": "F09",
+   "ECE-B|HS201": "F08",
+   "ECE-B|EC291": "F12",
+   "ECE-B|PH291": "F11"
+  },
+  "exam": {
+   "start_date": "2026-12-07",
+   "num_days": 6,
+   "slots": [
+    {
+     "id": "FN",
+     "label": "10:00-13:00"
+    },
+    {
+     "id": "AN",
+     "label": "14:00-17:00"
+    }
+   ],
+   "students_per_invigilator": 30
+  }
+ },
+ "sessions": [
+  {
+   "id": 0,
+   "section": "CSE-A",
+   "course": "CS201",
+   "faculty": "F01",
+   "room": "LH-102",
+   "day": 2,
+   "start": 0,
+   "duration": 1,
+   "type": "theory",
+   "substitute": null
+  },
+  {
+   "id": 1,
+   "section": "CSE-A",
+   "course": "CS201",
+   "faculty": "F01",
+   "room": "LH-102",
+   "day": 4,
+   "start": 3,
+   "duration": 1,
+   "type": "theory",
+   "substitute": null
+  },
+  {
+   "id": 2,
+   "section": "CSE-A",
+   "course": "CS201",
+   "faculty": "F01",
+   "room": "LH-102",
+   "day": 1,
+   "start": 5,
+   "duration": 1,
+   "type": "theory",
+   "substitute": null
+  },
+  {
+   "id": 3,
+   "section": "CSE-A",
+   "course": "CS202",
+   "faculty": "F03",
+   "room": "LH-101",
+   "day": 0,
+   "start": 3,
+   "duration": 1,
+   "type": "theory",
+   "substitute": null
+  },
+  {
+   "id": 4,
+   "section": "CSE-A",
+   "course": "CS202",
+   "faculty": "F03",
+   "room": "LH-102",
+   "day": 2,
+   "start": 4,
+   "duration": 1,
+   "type": "theory",
+   "substitute": null
+  },
+  {
+   "id": 5,
+   "section": "CSE-A",
+   "course": "CS202",
+   "faculty": "F03",
+   "room": "LH-102",
+   "day": 4,
+   "start": 2,
+   "duration": 1,
+   "type": "theory",
+   "substitute": null
+  },
+  {
+   "id": 6,
+   "section": "CSE-A",
+   "course": "CS203",
+   "faculty": "F02",
+   "room": "LH-102",
+   "day": 3,
+   "start": 3,
+   "duration": 1,
+   "type": "theory",
+   "substitute": null
+  },
+  {
+   "id": 7,
+   "section": "CSE-A",
+   "course": "CS203",
+   "faculty": "F02",
+   "room": "LH-102",
+   "day": 2,
+   "start": 3,
+   "duration": 1,
+   "type": "theory",
+   "substitute": null
+  },
+  {
+   "id": 8,
+   "section": "CSE-A",
+   "course": "CS203",
+   "faculty": "F02",
+   "room": "LH-102",
+   "day": 4,
+   "start": 1,
+   "duration": 1,
+   "type": "theory",
+   "substitute": null
+  },
+  {
+   "id": 9,
+   "section": "CSE-A",
+   "course": "MA201",
+   "faculty": "F04",
+   "room": "LH-102",
+   "day": 3,
+   "start": 4,
+   "duration": 1,
+   "type": "theory",
+   "substitute": null
+  },
+  {
+   "id": 10,
+   "section": "CSE-A",
+   "course": "MA201",
+   "faculty": "F04",
+   "room": "LH-101",
+   "day": 0,
+   "start": 5,
+   "duration": 1,
+   "type": "theory",
+   "substitute": null
+  },
+  {
+   "id": 11,
+   "section": "CSE-A",
+   "course": "MA201",
+   "faculty": "F04",
+   "room": "LH-101",
+   "day": 2,
+   "start": 5,
+   "duration": 1,
+   "type": "theory",
+   "substitute": null
+  },
+  {
+   "id": 12,
+   "section": "CSE-A",
+   "course": "HS201",
+   "faculty": "F08",
+   "room": "LH-101",
+   "day": 4,
+   "start": 0,
+   "duration": 1,
+   "type": "theory",
+   "substitute": null
+  },
+  {
+   "id": 13,
+   "section": "CSE-A",
+   "course": "HS201",
+   "faculty": "F08",
+   "room": "LH-101",
+   "day": 0,
+   "start": 4,
+   "duration": 1,
+   "type": "theory",
+   "substitute": null
+  },
+  {
+   "id": 14,
+   "section": "CSE-A",
+   "course": "CS291",
+   "faculty": "F10",
+   "room": "LAB-CS2",
+   "day": 0,
+   "start": 6,
+   "duration": 2,
+   "type": "lab",
+   "substitute": null
+  },
+  {
+   "id": 15,
+   "section": "CSE-A",
+   "course": "CS292",
+   "faculty": "F10",
+   "room": "LAB-CS2",
+   "day": 2,
+   "start": 1,
+   "duration": 2,
+   "type": "lab",
+   "substitute": null
+  },
+  {
+   "id": 16,
+   "section": "CSE-B",
+   "course": "CS201",
+   "faculty": "F02",
+   "room": "LH-102",
+   "day": 2,
+   "start": 2,
+   "duration": 1,
+   "type": "theory",
+   "substitute": null
+  },
+  {
+   "id": 17,
+   "section": "CSE-B",
+   "course": "CS201",
+   "faculty": "F02",
+   "room": "LH-102",
+   "day": 0,
+   "start": 1,
+   "duration": 1,
+   "type": "theory",
+   "substitute": null
+  },
+  {
+   "id": 18,
+   "section": "CSE-B",
+   "course": "CS201",
+   "faculty": "F02",
+   "room": "LH-102",
+   "day": 1,
+   "start": 1,
+   "duration": 1,
+   "type": "theory",
+   "substitute": null
+  },
+  {
+   "id": 19,
+   "section": "CSE-B",
+   "course": "CS202",
+   "faculty": "F01",
+   "room": "LH-102",
+   "day": 3,
+   "start": 2,
+   "duration": 1,
+   "type": "theory",
+   "substitute": null
+  },
+  {
+   "id": 20,
+   "section": "CSE-B",
+   "course": "CS202",
+   "faculty": "F01",
+   "room": "LH-101",
+   "day": 4,
+   "start": 1,
+   "duration": 1,
+   "type": "theory",
+   "substitute": null
+  },
+  {
+   "id": 21,
+   "section": "CSE-B",
+   "course": "CS202",
+   "faculty": "F01",
+   "room": "LH-102",
+   "day": 0,
+   "start": 0,
+   "duration": 1,
+   "type": "theory",
+   "substitute": null
+  },
+  {
+   "id": 22,
+   "section": "CSE-B",
+   "course": "CS203",
+   "faculty": "F03",
+   "room": "LH-102",
+   "day": 0,
+   "start": 2,
+   "duration": 1,
+   "type": "theory",
+   "substitute": null
+  },
+  {
+   "id": 23,
+   "section": "CSE-B",
+   "course": "CS203",
+   "faculty": "F03",
+   "room": "LH-102",
+   "day": 1,
+   "start": 2,
+   "duration": 1,
+   "type": "theory",
+   "substitute": null
+  },
+  {
+   "id": 24,
+   "section": "CSE-B",
+   "course": "CS203",
+   "faculty": "F03",
+   "room": "LH-101",
+   "day": 4,
+   "start": 4,
+   "duration": 1,
+   "type": "theory",
+   "substitute": null
+  },
+  {
+   "id": 25,
+   "section": "CSE-B",
+   "course": "MA201",
+   "faculty": "F09",
+   "room": "LH-102",
+   "day": 1,
+   "start": 3,
+   "duration": 1,
+   "type": "theory",
+   "substitute": null
+  },
+  {
+   "id": 26,
+   "section": "CSE-B",
+   "course": "MA201",
+   "faculty": "F09",
+   "room": "LH-102",
+   "day": 0,
+   "start": 3,
+   "duration": 1,
+   "type": "theory",
+   "substitute": null
+  },
+  {
+   "id": 27,
+   "section": "CSE-B",
+   "course": "MA201",
+   "faculty": "F09",
+   "room": "LH-102",
+   "day": 3,
+   "start": 0,
+   "duration": 1,
+   "type": "theory",
+   "substitute": null
+  },
+  {
+   "id": 28,
+   "section": "CSE-B",
+   "course": "HS201",
+   "faculty": "F08",
+   "room": "LH-102",
+   "day": 3,
+   "start": 1,
+   "duration": 1,
+   "type": "theory",
+   "substitute": null
+  },
+  {
+   "id": 29,
+   "section": "CSE-B",
+   "course": "HS201",
+   "faculty": "F08",
+   "room": "LH-102",
+   "day": 1,
+   "start": 4,
+   "duration": 1,
+   "type": "theory",
+   "substitute": null
+  },
+  {
+   "id": 30,
+   "section": "CSE-B",
+   "course": "CS291",
+   "faculty": "F10",
+   "room": "LAB-CS2",
+   "day": 4,
+   "start": 2,
+   "duration": 2,
+   "type": "lab",
+   "substitute": null
+  },
+  {
+   "id": 31,
+   "section": "CSE-B",
+   "course": "CS292",
+   "faculty": "F10",
+   "room": "LAB-CS2",
+   "day": 1,
+   "start": 5,
+   "duration": 2,
+   "type": "lab",
+   "substitute": null
+  },
+  {
+   "id": 32,
+   "section": "ECE-A",
+   "course": "EC201",
+   "faculty": "F05",
+   "room": "LH-202",
+   "day": 1,
+   "start": 3,
+   "duration": 1,
+   "type": "theory",
+   "substitute": null
+  },
+  {
+   "id": 33,
+   "section": "ECE-A",
+   "course": "EC201",
+   "faculty": "F05",
+   "room": "LH-201",
+   "day": 0,
+   "start": 3,
+   "duration": 1,
+   "type": "theory",
+   "substitute": null
+  },
+  {
+   "id": 34,
+   "section": "ECE-A",
+   "course": "EC201",
+   "faculty": "F05",
+   "room": "LH-202",
+   "day": 2,
+   "start": 0,
+   "duration": 1,
+   "type": "theory",
+   "substitute": null
+  },
+  {
+   "id": 35,
+   "section": "ECE-A",
+   "course": "EC202",
+   "faculty": "F07",
+   "room": "LH-201",
+   "day": 1,
+   "start": 5,
+   "duration": 1,
+   "type": "theory",
+   "substitute": null
+  },
+  {
+   "id": 36,
+   "section": "ECE-A",
+   "course": "EC202",
+   "faculty": "F07",
+   "room": "LH-202",
+   "day": 0,
+   "start": 5,
+   "duration": 1,
+   "type": "theory",
+   "substitute": null
+  },
+  {
+   "id": 37,
+   "section": "ECE-A",
+   "course": "EC202",
+   "faculty": "F07",
+   "room": "LH-202",
+   "day": 3,
+   "start": 1,
+   "duration": 1,
+   "type": "theory",
+   "substitute": null
+  },
+  {
+   "id": 38,
+   "section": "ECE-A",
+   "course": "EC203",
+   "faculty": "F06",
+   "room": "LH-202",
+   "day": 0,
+   "start": 4,
+   "duration": 1,
+   "type": "theory",
+   "substitute": null
+  },
+  {
+   "id": 39,
+   "section": "ECE-A",
+   "course": "EC203",
+   "faculty": "F06",
+   "room": "LH-201",
+   "day": 2,
+   "start": 2,
+   "duration": 1,
+   "type": "theory",
+   "substitute": null
+  },
+  {
+   "id": 40,
+   "section": "ECE-A",
+   "course": "EC203",
+   "faculty": "F06",
+   "room": "LH-202",
+   "day": 1,
+   "start": 2,
+   "duration": 1,
+   "type": "theory",
+   "substitute": null
+  },
+  {
+   "id": 41,
+   "section": "ECE-A",
+   "course": "MA202",
+   "faculty": "F04",
+   "room": "LH-202",
+   "day": 1,
+   "start": 4,
+   "duration": 1,
+   "type": "theory",
+   "substitute": null
+  },
+  {
+   "id": 42,
+   "section": "ECE-A",
+   "course": "MA202",
+   "faculty": "F04",
+   "room": "LH-202",
+   "day": 3,
+   "start": 0,
+   "duration": 1,
+   "type": "theory",
+   "substitute": null
+  },
+  {
+   "id": 43,
+   "section": "ECE-A",
+   "course": "MA202",
+   "faculty": "F04",
+   "room": "LH-202",
+   "day": 2,
+   "start": 1,
+   "duration": 1,
+   "type": "theory",
+   "substitute": null
+  },
+  {
+   "id": 44,
+   "section": "ECE-A",
+   "course": "HS201",
+   "faculty": "F08",
+   "room": "LH-202",
+   "day": 4,
+   "start": 1,
+   "duration": 1,
+   "type": "theory",
+   "substitute": null
+  },
+  {
+   "id": 45,
+   "section": "ECE-A",
+   "course": "HS201",
+   "faculty": "F08",
+   "room": "LH-202",
+   "day": 3,
+   "start": 4,
+   "duration": 1,
+   "type": "theory",
+   "substitute": null
+  },
+  {
+   "id": 46,
+   "section": "ECE-A",
+   "course": "EC291",
+   "faculty": "F12",
+   "room": "LAB-EC1",
+   "day": 0,
+   "start": 6,
+   "duration": 2,
+   "type": "lab",
+   "substitute": null
+  },
+  {
+   "id": 47,
+   "section": "ECE-A",
+   "course": "PH291",
+   "faculty": "F11",
+   "room": "LAB-PH1",
+   "day": 3,
+   "start": 2,
+   "duration": 2,
+   "type": "lab",
+   "substitute": null
+  },
+  {
+   "id": 48,
+   "section": "ECE-B",
+   "course": "EC201",
+   "faculty": "F06",
+   "room": "LH-202",
+   "day": 3,
+   "start": 2,
+   "duration": 1,
+   "type": "theory",
+   "substitute": null
+  },
+  {
+   "id": 49,
+   "section": "ECE-B",
+   "course": "EC201",
+   "faculty": "F06",
+   "room": "LH-201",
+   "day": 1,
+   "start": 3,
+   "duration": 1,
+   "type": "theory",
+   "substitute": null
+  },
+  {
+   "id": 50,
+   "section": "ECE-B",
+   "course": "EC201",
+   "faculty": "F06",
+   "room": "LH-202",
+   "day": 2,
+   "start": 3,
+   "duration": 1,
+   "type": "theory",
+   "substitute": null
+  },
+  {
+   "id": 51,
+   "section": "ECE-B",
+   "course": "EC202",
+   "faculty": "F05",
+   "room": "LH-201",
+   "day": 1,
+   "start": 2,
+   "duration": 1,
+   "type": "theory",
+   "substitute": null
+  },
+  {
+   "id": 52,
+   "section": "ECE-B",
+   "course": "EC202",
+   "faculty": "F05",
+   "room": "LH-202",
+   "day": 3,
+   "start": 3,
+   "duration": 1,
+   "type": "theory",
+   "substitute": null
+  },
+  {
+   "id": 53,
+   "section": "ECE-B",
+   "course": "EC202",
+   "faculty": "F05",
+   "room": "LH-201",
+   "day": 0,
+   "start": 4,
+   "duration": 1,
+   "type": "theory",
+   "substitute": null
+  },
+  {
+   "id": 54,
+   "section": "ECE-B",
+   "course": "EC203",
+   "faculty": "F07",
+   "room": "LH-202",
+   "day": 1,
+   "start": 1,
+   "duration": 1,
+   "type": "theory",
+   "substitute": null
+  },
+  {
+   "id": 55,
+   "section": "ECE-B",
+   "course": "EC203",
+   "faculty": "F07",
+   "room": "LH-202",
+   "day": 3,
+   "start": 5,
+   "duration": 1,
+   "type": "theory",
+   "substitute": null
+  },
+  {
+   "id": 56,
+   "section": "ECE-B",
+   "course": "EC203",
+   "faculty": "F07",
+   "room": "LH-202",
+   "day": 0,
+   "start": 3,
+   "duration": 1,
+   "type": "theory",
+   "substitute": null
+  },
+  {
+   "id": 57,
+   "section": "ECE-B",
+   "course": "MA202",
+   "faculty": "F09",
+   "room": "LH-202",
+   "day": 2,
+   "start": 2,
+   "duration": 1,
+   "type": "theory",
+   "substitute": null
+  },
+  {
+   "id": 58,
+   "section": "ECE-B",
+   "course": "MA202",
+   "faculty": "F09",
+   "room": "LH-201",
+   "day": 3,
+   "start": 4,
+   "duration": 1,
+   "type": "theory",
+   "substitute": null
+  },
+  {
+   "id": 59,
+   "section": "ECE-B",
+   "course": "MA202",
+   "faculty": "F09",
+   "room": "LH-201",
+   "day": 1,
+   "start": 4,
+   "duration": 1,
+   "type": "theory",
+   "substitute": null
+  },
+  {
+   "id": 60,
+   "section": "ECE-B",
+   "course": "HS201",
+   "faculty": "F08",
+   "room": "LH-202",
+   "day": 1,
+   "start": 0,
+   "duration": 1,
+   "type": "theory",
+   "substitute": null
+  },
+  {
+   "id": 61,
+   "section": "ECE-B",
+   "course": "HS201",
+   "faculty": "F08",
+   "room": "LH-202",
+   "day": 0,
+   "start": 2,
+   "duration": 1,
+   "type": "theory",
+   "substitute": null
+  },
+  {
+   "id": 62,
+   "section": "ECE-B",
+   "course": "EC291",
+   "faculty": "F12",
+   "room": "LAB-EC1",
+   "day": 3,
+   "start": 6,
+   "duration": 2,
+   "type": "lab",
+   "substitute": null
+  },
+  {
+   "id": 63,
+   "section": "ECE-B",
+   "course": "PH291",
+   "faculty": "F11",
+   "room": "LAB-PH1",
+   "day": 2,
+   "start": 0,
+   "duration": 2,
+   "type": "lab",
+   "substitute": null
+  }
+ ],
+ "exams": [
+  {
+   "date": "2026-12-07",
+   "weekday": "Mon",
+   "slot": "FN",
+   "time": "10:00-13:00",
+   "exams": [
+    {
+     "course": "CS201",
+     "name": "Data Structures",
+     "students": 105,
+     "sections": [
+      "CSE-A",
+      "CSE-B"
+     ]
+    }
+   ],
+   "halls": [
+    {
+     "hall": "SEM-HALL",
+     "candidates": 105,
+     "courses": {
+      "CS201": 105
+     },
+     "invigilators": [
+      "F03",
+      "F04",
+      "F05",
+      "F06"
+     ],
+     "invigilators_short": 0
+    }
+   ]
+  },
+  {
+   "date": "2026-12-07",
+   "weekday": "Mon",
+   "slot": "AN",
+   "time": "14:00-17:00",
+   "exams": [
+    {
+     "course": "MA202",
+     "name": "Engineering Mathematics",
+     "students": 85,
+     "sections": [
+      "ECE-A",
+      "ECE-B"
+     ]
+    }
+   ],
+   "halls": [
+    {
+     "hall": "SEM-HALL",
+     "candidates": 85,
+     "courses": {
+      "MA202": 85
+     },
+     "invigilators": [
+      "F01",
+      "F02",
+      "F07"
+     ],
+     "invigilators_short": 0
+    }
+   ]
+  },
+  {
+   "date": "2026-12-08",
+   "weekday": "Tue",
+   "slot": "FN",
+   "time": "10:00-13:00",
+   "exams": [
+    {
+     "course": "EC202",
+     "name": "Signals & Systems",
+     "students": 85,
+     "sections": [
+      "ECE-A",
+      "ECE-B"
+     ]
+    },
+    {
+     "course": "MA201",
+     "name": "Discrete Mathematics",
+     "students": 105,
+     "sections": [
+      "CSE-A",
+      "CSE-B"
+     ]
+    }
+   ],
+   "halls": [
+    {
+     "hall": "SEM-HALL",
+     "candidates": 105,
+     "courses": {
+      "MA201": 105
+     },
+     "invigilators": [
+      "F08",
+      "F10",
+      "F11",
+      "F12"
+     ],
+     "invigilators_short": 0
+    },
+    {
+     "hall": "LH-101",
+     "candidates": 60,
+     "courses": {
+      "EC202": 60
+     },
+     "invigilators": [
+      "F01",
+      "F02"
+     ],
+     "invigilators_short": 0
+    },
+    {
+     "hall": "LH-102",
+     "candidates": 25,
+     "courses": {
+      "EC202": 25
+     },
+     "invigilators": [
+      "F03"
+     ],
+     "invigilators_short": 0
+    }
+   ]
+  },
+  {
+   "date": "2026-12-09",
+   "weekday": "Wed",
+   "slot": "AN",
+   "time": "14:00-17:00",
+   "exams": [
+    {
+     "course": "HS201",
+     "name": "Professional Communication",
+     "students": 190,
+     "sections": [
+      "CSE-A",
+      "CSE-B",
+      "ECE-A",
+      "ECE-B"
+     ]
+    }
+   ],
+   "halls": [
+    {
+     "hall": "SEM-HALL",
+     "candidates": 120,
+     "courses": {
+      "HS201": 120
+     },
+     "invigilators": [
+      "F09",
+      "F04",
+      "F05",
+      "F06"
+     ],
+     "invigilators_short": 0
+    },
+    {
+     "hall": "LH-101",
+     "candidates": 60,
+     "courses": {
+      "HS201": 60
+     },
+     "invigilators": [
+      "F07",
+      "F10"
+     ],
+     "invigilators_short": 0
+    },
+    {
+     "hall": "LH-102",
+     "candidates": 10,
+     "courses": {
+      "HS201": 10
+     },
+     "invigilators": [
+      "F11"
+     ],
+     "invigilators_short": 0
+    }
+   ]
+  },
+  {
+   "date": "2026-12-10",
+   "weekday": "Thu",
+   "slot": "AN",
+   "time": "14:00-17:00",
+   "exams": [
+    {
+     "course": "EC203",
+     "name": "Analog Circuits",
+     "students": 85,
+     "sections": [
+      "ECE-A",
+      "ECE-B"
+     ]
+    }
+   ],
+   "halls": [
+    {
+     "hall": "SEM-HALL",
+     "candidates": 85,
+     "courses": {
+      "EC203": 85
+     },
+     "invigilators": [
+      "F08",
+      "F09",
+      "F12"
+     ],
+     "invigilators_short": 0
+    }
+   ]
+  },
+  {
+   "date": "2026-12-11",
+   "weekday": "Fri",
+   "slot": "FN",
+   "time": "10:00-13:00",
+   "exams": [
+    {
+     "course": "CS203",
+     "name": "Operating Systems",
+     "students": 105,
+     "sections": [
+      "CSE-A",
+      "CSE-B"
+     ]
+    }
+   ],
+   "halls": [
+    {
+     "hall": "SEM-HALL",
+     "candidates": 105,
+     "courses": {
+      "CS203": 105
+     },
+     "invigilators": [
+      "F01",
+      "F04",
+      "F05",
+      "F06"
+     ],
+     "invigilators_short": 0
+    }
+   ]
+  },
+  {
+   "date": "2026-12-12",
+   "weekday": "Sat",
+   "slot": "FN",
+   "time": "10:00-13:00",
+   "exams": [
+    {
+     "course": "CS202",
+     "name": "Database Systems",
+     "students": 105,
+     "sections": [
+      "CSE-A",
+      "CSE-B"
+     ]
+    },
+    {
+     "course": "EC201",
+     "name": "Digital Electronics",
+     "students": 85,
+     "sections": [
+      "ECE-A",
+      "ECE-B"
+     ]
+    }
+   ],
+   "halls": [
+    {
+     "hall": "SEM-HALL",
+     "candidates": 105,
+     "courses": {
+      "CS202": 105
+     },
+     "invigilators": [
+      "F02",
+      "F07",
+      "F08",
+      "F09"
+     ],
+     "invigilators_short": 0
+    },
+    {
+     "hall": "LH-101",
+     "candidates": 60,
+     "courses": {
+      "EC201": 60
+     },
+     "invigilators": [
+      "F10",
+      "F11"
+     ],
+     "invigilators_short": 0
+    },
+    {
+     "hall": "LH-102",
+     "candidates": 25,
+     "courses": {
+      "EC201": 25
+     },
+     "invigilators": [
+      "F12"
+     ],
+     "invigilators_short": 0
+    }
+   ]
+  }
+ ],
+ "published_at": "2026-10-29T16:39:27"
+}
