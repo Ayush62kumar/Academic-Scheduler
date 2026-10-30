@@ -34,7 +34,8 @@ app = FastAPI(title="Academic Scheduler Prototype")
 BASE = Path(__file__).parent
 app.mount("/static", StaticFiles(directory=BASE / "static"), name="static")
 
-STORE = Path(os.environ.get("SCHEDULER_STORE", BASE))      # where data.json / accounts.json / activity.json live
+STORE = Path(os.environ.get("SCHEDULER_STORE", BASE)) 
+STORE.mkdir(parents=True, exist_ok=True)   # where data.json / accounts.json / activity.json live
 DATA_FILE, ACCOUNTS_FILE, PUBLISHED_FILE = STORE / "data.json", STORE / "accounts.json", STORE / "published.json"
 LOCK = threading.RLock()
 SESSION_TTL = 12 * 3600
